@@ -28,7 +28,6 @@ export const ButtonAdd = ({increaseBy, className}: {buttonAdd: string, increaseB
 export const ProductButtons = ({className, style}: Props) => {
     // TODO: maxCount
     const {increaseBy, counter, maxCount} = useContext(ProductContext)
-    console.log(maxCount);
     
     const isMaxReached = useCallback(() => {
         return counter === maxCount
