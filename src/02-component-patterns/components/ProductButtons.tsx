@@ -1,4 +1,4 @@
-import { CSSProperties, useContext } from "react";
+import { CSSProperties, useCallback, useContext } from "react";
 import { ProductContext } from "./ProductCard";
 import styles from '../styles/styles.module.css';
 
@@ -13,27 +13,33 @@ export const CountLabel = ({counter}: {countLabel: string, counter: number}) => 
     )
 }
 
-export const ButtonMinus = ({increaseBy}: {buttonMinus: string, increaseBy: (value: number) => void}) => {
+export const ButtonMinus = ({increaseBy, className}: {buttonMinus: string, increaseBy: (value: number) => void, className?: string}) => {
     return (
-        <button className={styles.buttonMinus} onClick={() => increaseBy(-1)}>-</button>
+        <button className={`${styles.buttonMinus} ${className}`} onClick={() => increaseBy(-1)}>-</button>
     )
 }
 
-export const ButtonAdd = ({increaseBy}: {buttonAdd: string, increaseBy: (value: number) => void}) => {
+export const ButtonAdd = ({increaseBy, className}: {buttonAdd: string, increaseBy: (value: number) => void, className?: string}) => {
     return (
-        <button className={styles.buttonAdd} onClick={() => increaseBy(+1)}>+</button>
+        <button className={`${styles.buttonAdd} ${className}`} onClick={() => increaseBy(+1)}>+</button>
     )
 }
 
 export const ProductButtons = ({className, style}: Props) => {
-
-    const {increaseBy, counter} = useContext(ProductContext)
+    // TODO: maxCount
+    const {increaseBy, counter, maxCount} = useContext(ProductContext)
+    console.log(maxCount);
+    
+    const isMaxReached = useCallback(() => {
+        return counter === maxCount
+    }, [counter, maxCount],)
+    
   
     return (
       <div className={`${styles.buttonsContainer} ${className}`} style={style}> 
         <ButtonMinus buttonMinus={styles.buttonMinus} increaseBy={increaseBy} />
         <CountLabel countLabel={styles.countLabel} counter={counter} />
-        <ButtonAdd buttonAdd={styles.buttonAdd} increaseBy={increaseBy} />
+        <ButtonAdd buttonAdd={styles.buttonAdd} increaseBy={increaseBy} className={isMaxReached() ? styles.disabled : '' } />
       </div>
     );
 }
